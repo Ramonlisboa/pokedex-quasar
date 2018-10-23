@@ -96,6 +96,7 @@ export default {
 </script>
 
 <style scoped >
+/* CSS POKEDEX https://codepen.io/TabaresSotelo/pen/qYpvyq?page=1& */
 
 .filtro-fosco {
   -webkit-filter: blur(5px);
