@@ -1,5 +1,5 @@
 <template>
-   <q-modal v-model="opened" maximized >
+   <q-modal v-model="opened" maximized no-backdrop-dismiss>
      <q-modal-layout  class="img" >
         <div class="row q-pa-md">
            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Press+Start+2P">
@@ -10,13 +10,17 @@
               </div>
               <div class="camera-display">
                 <!-- <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/004.png" style="width: 200px"/> -->
-                <img v-if="pokemon.id !== undefined" :src="pokemon.sprites.front_default" style="width: 15rem"/>
-                <!-- <img v-if="pokemon.id !== undefined" :src="pokemon.sprites.back_default" style="width: 6rem"/>
-                <img v-if="pokemon.id !== undefined" :src="pokemon.sprites.back_shiny" style="width: 6rem"/>
-                <img v-if="pokemon.id !== undefined" :src="pokemon.sprites.front_shiny" style="width: 6rem"/> -->
+                <img v-if="img == 0" :src="pokemon.sprites.front_default" style="width: 15rem"/>
+                <p v-if="img == 0" >Front</p>
+                <img v-if="img == 1" :src="pokemon.sprites.back_default" style="width: 15rem"/>
+                 <p v-if="img == 1" >Back</p>
+                <img v-if="img == 2" :src="pokemon.sprites.front_shiny" style="width: 15rem"/>
+                 <p v-if="img == 2" >Front Shiny</p>
+                <img v-if="img == 3" :src="pokemon.sprites.back_shiny" style="width: 15rem"/>
+                 <p v-if="img == 3" >Back Shiny</p>
               </div>
               <div class="divider"></div>
-              <div class="stats-display">
+              <div class="stats-display" v-if="!erro">
                 <p style="margin-bottom: 1rem">Name: {{pokemon.name}}</p>
                 <p>Abilities:</p>
                 <!-- <span>Abilities</span> -->
@@ -34,6 +38,9 @@
                   <!-- <li>dragon-breath</li>
                   <li>dragon-claw</li> -->
                 </ul>
+              </div>
+              <div class="stats-display" v-else>
+                <p>Nenhum pokemon encontrado</p>
               </div>
               <div class="botom-actions">
                 <div id="actions">
@@ -53,10 +60,10 @@
                   inverted color="red-10" style="margin-top: 3%" float-label="Pesquise" />
               </div>
               <div class="bottom-modes">
-                  <button class="level-button"></button>
-                  <button class="level-button"></button>
-                  <button class="level-button"></button>
-                  <button class="level-button"></button>
+                  <button class="level-button" @click="img=0"></button>
+                  <button class="level-button" @click="img=1"></button>
+                  <button class="level-button" @click="img=2"></button>
+                  <button class="level-button" @click="img=3"></button>
                   <!-- <button class="pokedex-mode black-button">Pokedex</button> -->
                   <button class="game-mode black-button" @click="consultaPokemon()">Pesquisar</button>
               </div>
@@ -77,7 +84,9 @@ export default {
     return {
       opened: true,
       pokemon: {},
-      pesquisa: ''
+      img: null,
+      pesquisa: '',
+      erro: false
     }
   },
   methods: {
@@ -85,10 +94,14 @@ export default {
       this.$axios.get(`https://pokeapi.co/api/v2/pokemon/${this.pesquisa}/`)
         .then((res) => {
           this.pokemon = res.data
+          this.img = 0
+          this.erro = false
           console.log(res.data)
         })
         .catch(() => {
-
+          this.img = null
+          this.erro = true
+          this.pokemon = {}
         })
     }
   }

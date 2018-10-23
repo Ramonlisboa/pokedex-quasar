@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md">
-    <div class="row  fixed-center">
+    <!-- <div class="row  fixed-center">
       <div class="col-12">
         <q-input v-model="pesquisa" float-label="Digite o nome ou numero do pokemon"
           placeholder="Ex: pikachu" />
@@ -19,7 +19,7 @@
             <q-card-separator />
           </q-card>
       </div>
-    </div>
+    </div> -->
     <pk-modal-pokedex></pk-modal-pokedex>
   </q-page>
 </template>
