@@ -6,29 +6,38 @@
           <body id="forest">
             <div id="pokedex">
               <div class="sensor">
-                <button></button>
+                <!-- <button>button</button> -->
               </div>
               <div class="camera-display">
-                <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/004.png" style="width: 200px"/>
+                <!-- <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/004.png" style="width: 200px"/> -->
+                <img v-if="pokemon.id !== undefined" :src="pokemon.sprites.front_default" style="width: 15rem"/>
+                <!-- <img v-if="pokemon.id !== undefined" :src="pokemon.sprites.back_default" style="width: 6rem"/>
+                <img v-if="pokemon.id !== undefined" :src="pokemon.sprites.back_shiny" style="width: 6rem"/>
+                <img v-if="pokemon.id !== undefined" :src="pokemon.sprites.front_shiny" style="width: 6rem"/> -->
               </div>
               <div class="divider"></div>
               <div class="stats-display">
-                <span>Charmander</span>
-                <span>Abilities</span>
+                <p style="margin-bottom: 1rem">Name: {{pokemon.name}}</p>
+                <p>Abilities:</p>
+                <!-- <span>Abilities</span> -->
                 <ul>
-                  <li>Solar-power</li>
-                  <li>Blaze</li>
+                  <li v-for="(abi, index) in pokemon.abilities" :key="index">
+                    {{abi.ability.name}}
+                  </li>
+                  <!-- <li>Blaze</li> -->
                 </ul>
-                <span>Moves</span>
-                <ul>
-                  <li>dragon-rage</li>
-                  <li>dragon-breath</li>
-                  <li>dragon-claw</li>
+                <span>Stats</span>
+                <ul style="font-size:12px">
+                  <li v-for="(stats, index) in pokemon.stats" :key="index">
+                   {{stats.base_stat}} {{stats.stat.name}}
+                  </li>
+                  <!-- <li>dragon-breath</li>
+                  <li>dragon-claw</li> -->
                 </ul>
               </div>
               <div class="botom-actions">
                 <div id="actions">
-                  <button class="a"></button>
+                  <!-- <button class="a">button</button> -->
                 </div>
                 <div id="cross">
                   <button class="cross-button up"></button>
@@ -38,22 +47,25 @@
                   <div class="cross-button center"> </div>
                 </div>
               </div>
-              <div class="input-pad"><input /></div>
+              <div class="input-pad">
+                <!-- <input /> -->
+                 <q-input v-model="pesquisa"
+                  inverted color="red-10" style="margin-top: 3%" float-label="Pesquise" />
+              </div>
               <div class="bottom-modes">
-
                   <button class="level-button"></button>
                   <button class="level-button"></button>
                   <button class="level-button"></button>
                   <button class="level-button"></button>
-                  <button class="pokedex-mode black-button">Pokedex</button>
-                  <button class="game-mode black-button">Game</button>
+                  <!-- <button class="pokedex-mode black-button">Pokedex</button> -->
+                  <button class="game-mode black-button" @click="consultaPokemon()">Pesquisar</button>
               </div>
             </div>
           </body>
         </div>
-        <div class="row absolute-bottom justify-end q-pr-md q-pb-md">
+        <!-- <div class="row absolute-bottom justify-end q-pr-md q-pb-md">
           <q-btn color="primary" @click="opened = false" size="lg" label="Close" />
-        </div>
+        </div> -->
      </q-modal-layout>
   </q-modal>
 </template>
@@ -63,7 +75,21 @@ export default {
   name: 'Pk-modal-pokedex',
   data () {
     return {
-      opened: true
+      opened: true,
+      pokemon: {},
+      pesquisa: ''
+    }
+  },
+  methods: {
+    consultaPokemon () {
+      this.$axios.get(`https://pokeapi.co/api/v2/pokemon/${this.pesquisa}/`)
+        .then((res) => {
+          this.pokemon = res.data
+          console.log(res.data)
+        })
+        .catch(() => {
+
+        })
     }
   }
 }
@@ -129,6 +155,7 @@ export default {
   grid-row-start: 3;
   padding: 15px;
   overflow: scroll;
+  font-size: 12px;
   h2 {
     margin: 10px 0;
   }
@@ -256,7 +283,7 @@ export default {
 }
 .game-mode {
   grid-row-start: 3;
-  grid-column-start: 3;
+  grid-column-start: 1;
   grid-column-end: 5;
 }
 
